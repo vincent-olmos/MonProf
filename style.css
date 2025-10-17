@@ -1,0 +1,126 @@
+/* Style de base pour tout le corps */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Conteneur principal du Chatbot */
+#chat-container {
+    background-color: white;
+    width: 100%;
+    max-width: 450px; /* Limite de taille pour un look mobile */
+    height: 100vh; /* Pleine hauteur sur mobile */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* En-tête */
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+/* Zone des messages */
+#messages {
+    flex-grow: 1; /* Prend l'espace restant */
+    padding: 15px;
+    overflow-y: auto; /* Permet le défilement des messages */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style général d'un message */
+.message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+/* Style des messages de l'IA (le Technicien) */
+.ia-message {
+    background-color: #e9ecef;
+    align-self: flex-start; /* Aligné à gauche */
+    color: #333;
+}
+
+/* Style des messages de l'Utilisateur (le Client) */
+.user-message {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end; /* Aligné à droite */
+}
+
+/* Zone de saisie */
+#input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+#send-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#send-button:hover {
+    background-color: #218838;
+}
+/* Animation d'un point clignotant */
+@keyframes blink {
+    0% { opacity: 0.2; }
+    20% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+/* Style de l'indicateur de frappe (typing indicator) */
+.loading-placeholder {
+    display: flex;
+    align-items: center;
+    font-style: italic;
+    color: #6c757d; /* Couleur discrète */
+}
+
+/* Les trois points de l'indicateur */
+.loading-placeholder span {
+    width: 6px;
+    height: 6px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    margin-left: 4px;
+    animation: blink 1.4s infinite; /* Applique l'animation */
+}
+
+/* Décalage pour les points 2 et 3 */
+.loading-placeholder span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-placeholder span:nth-child(3) {
+    animation-delay: 0.4s;
+}
