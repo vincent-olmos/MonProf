@@ -1,13 +1,24 @@
-// A. CONFIGURATION DE L'IA ET VARIABLES CLÉS
-// ----------------------------------------------------
+// 1. Importation du SDK officiel
+import { GoogleGenAI } from 'https://esm.run/@google/genai';
 
-// 1. Importation du constructeur directement depuis le CDN via l'URL pour la méthode la plus fiable
-import { GoogleGenAI } from 'https://esm.run/@google/genai'; 
+// 2. Initialisation avec votre clé (sécurisée de préférence via variable d'environnement)
+const ai = new GoogleGenAI({ apiKey: 'VOTRE_NOUVELLE_CLE_API' });
 
-// ⚠️ REMPLACEZ 'VOTRE_CLE_API_GEMINI' par votre véritable clé d'API ⚠️
-const API_KEY = 'AIzaSyAEM0-_OcSJ1CyM98-sgPERWoNbRLlINbY'; 
-const ai = new GoogleGenAI({ apiKey: API_KEY }); 
+// 3. Exemple d'utilisation (Asynchrone)
+async function genererTexte() {
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash', // Utilisez le modèle recommandé actuel
+      contents: 'Bonjour ! Donne-moi une astuce de code en une phrase.',
+    });
 
+    console.log(response.text);
+  } catch (error) {
+    console.error("Erreur lors de l'appel à Gemini :", error);
+  }
+}
+
+genererTexte();
 // Définition du rôle de l'IA (System Instruction)
 const systemInstruction = `
     Vous êtes un professeur de technologie de collège en cycle 4(référentiels : https://www.sti2d.net/organisation-pedagogique/2069-cycle-4-programme-de-technologie-2024 et https://www.education.gouv.fr/bo/2024/Hebdo9/MENE2402802A). 
