@@ -2,7 +2,7 @@
 import { GoogleGenAI } from 'https://esm.run/@google/genai';
 
 // 2. Initialisation avec votre clé (sécurisée de préférence via variable d'environnement)
-const ai = new GoogleGenAI({ apiKey: 'VOTRE_NOUVELLE_CLE_API' });
+const ai = new GoogleGenAI({ apiKey: 'AQ.Ab8RN6JOV-OuLpfYpo9WRKQbrEn6SNC8BgKyvhxHZiZfzsnWaw' });
 
 // 3. Exemple d'utilisation (Asynchrone)
 async function genererTexte() {
