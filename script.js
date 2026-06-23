@@ -4,7 +4,7 @@
 // 1. Importation du constructeur directement depuis le CDN
 import { GoogleGenAI } from 'https://esm.run/@google/genai'; 
 
-// ⚠️ REMPLACEZ PAR VOTRE NOUVELLE CLÉ API SÉCURISÉE ⚠️
+// ⚠️ METTEZ VOTRE NOUVELLE CLÉ ICI (Et gardez-la secrète !) ⚠️
 const API_KEY = 'AQ.Ab8RN6Kw6C2eaiHzu21dWuoalA1_y2xHjb-zNZRhOsbwaYQrXQ'; 
 const ai = new GoogleGenAI({ apiKey: API_KEY }); 
 
@@ -47,7 +47,12 @@ function displayMessage(text, sender) {
         messageDiv.classList.add('loading-placeholder'); 
         messageDiv.innerHTML = '<span></span><span></span><span></span>';
     } else {
-        messageDiv.textContent = text;
+        // Remplacement basique du Markdown pour le gras (**) et les sauts de ligne (\n)
+        let formattedText = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
+        
+        messageDiv.innerHTML = formattedText;
     }
     
     chatMessages.appendChild(messageDiv);
@@ -56,20 +61,19 @@ function displayMessage(text, sender) {
 }
 
 /**
- * Initialise une nouvelle session de chat avec la bonne syntaxe du SDK v1
+ * Initialise une nouvelle session de chat
  */
 function startNewChat() {
-    // Correction de la syntaxe pour coller au SDK @google/genai
+    // Configuration correcte selon les spécifications du SDK
     chat = ai.chats.create({
         model: 'gemini-2.5-flash', 
         config: {
             systemInstruction: systemInstruction,
-            // Activation des outils (recherche Google) si nécessaire
             tools: [{ googleSearch: {} }]
         }
     });
     
-    // Message d'accueil initial respectant vos règles métiers
+    // Message d'accueil conforme à vos instructions système
     const welcomeMessage = "**Bienvenue en classe de Technologie !**\n\nBonjour ! Quel est le chapitre que vous voulez aborder, et pourriez-vous m'indiquer votre niveau de classe et votre prénom ? Décrivez brièvement ce que vous voulez savoir.";
     displayMessage(welcomeMessage, 'ia');
 }
@@ -79,11 +83,17 @@ function startNewChat() {
  */
 async function getDiagnosticResponse(userText) {
     try {
-        // Syntaxe correcte pour envoyer un message dans le chat avec le nouveau SDK
-        const response = await chat.sendMessage({
-            message: userText
-        });
-        return response.text;
+        // CORRECTION ICI : Envoi du message au format attendu par le SDK
+        const response = await chat.sendMessage(userText);
+        
+        // CORRECTION ICI : Extraction correcte du texte de la réponse
+        if (response && response.text) {
+            return response.text;
+        } else if (response.candidates && response.candidates[0].content.parts[0].text) {
+            return response.candidates[0].content.parts[0].text;
+        }
+        
+        return "Je n'ai pas compris la réponse du serveur.";
     } catch (error) {
         console.error("Erreur lors de l'appel à l'API Gemini :", error);
         return "Désolé, une erreur est survenue lors de la communication avec le professeur virtuel. Vérifiez la console et votre clé API.";
@@ -105,8 +115,13 @@ async function handleSendMessage() {
     const iaResponse = await getDiagnosticResponse(userText);
     
     // 4. Mettre à jour le message de chargement avec la vraie réponse
-    iaLoadingMessage.textContent = iaResponse;
     iaLoadingMessage.classList.remove('loading-placeholder'); 
+    
+    // On applique le traitement Markdown/HTML
+    let formattedResponse = iaResponse
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    iaLoadingMessage.innerHTML = formattedResponse;
     
     userInput.focus();
 }
@@ -120,17 +135,20 @@ function handleNewDiagnosis() {
 // D. EXÉCUTION ET ÉCOUTEURS D'ÉVÉNEMENTS
 // -------------------------------------------------------------
 
-// Attendre que le DOM soit chargé si le script est placé dans le <head>
 document.addEventListener('DOMContentLoaded', () => {
     startNewChat(); 
 
-    sendButton.addEventListener('click', handleSendMessage);
+    if (sendButton) {
+        sendButton.addEventListener('click', handleSendMessage);
+    }
 
-    userInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            handleSendMessage();
-        }
-    });
+    if (userInput) {
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+    }
 
     if (newDiagnosisButton) {
         newDiagnosisButton.addEventListener('click', handleNewDiagnosis);
