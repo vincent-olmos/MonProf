@@ -5,7 +5,7 @@
 import { GoogleGenAI } from 'https://esm.run/@google/genai'; 
 
 // ⚠️ REMPLACEZ PAR VOTRE NOUVELLE CLÉ API SÉCURISÉE ⚠️
-const API_KEY = 'VOTRE_NOUVELLE_CLE_API'; 
+const API_KEY = 'AQ.Ab8RN6Kw6C2eaiHzu21dWuoalA1_y2xHjb-zNZRhOsbwaYQrXQ'; 
 const ai = new GoogleGenAI({ apiKey: API_KEY }); 
 
 // Définition du rôle de l'IA (System Instruction)
